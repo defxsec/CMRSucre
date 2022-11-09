@@ -1,0 +1,167 @@
+﻿@model IEnumerable<CMRSucre.Models.Certificado>
+
+@{
+    ViewData["Title"] = "DISTRIBUCIÓN DE EXCEDENTES";
+}
+
+<h1 class="text-center">DISTRIBUCIÓN DE EXCEDENTES</h1>
+@{
+    string FD = ""; //Certificados con Antigüedad Minima (90 días)
+    decimal DD; //Días Válidos sobre el Total de Días (360)
+    decimal RA; //Relación de Aportaciones y Dias Válidos
+    //decimal SumaRA = 0; //Suma de Relación de Aportaciones y Dias Válidos
+    decimal DE; //Destribución Excedentes de Percepción
+    decimal SumaDE = 0; //Suma de Destribución Excedentes de Percepción
+} 
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">1</th>
+            <th scope="col">2</th>
+            <th scope="col">3</th>
+            <th scope="col">4</th>
+            <th scope="col">5</th>
+            <th scope="col">6</th>
+            <th scope="col">7</th>
+            <th scope="col">8</th>
+            <th scope="col">9</th>
+            <th scope="col">10</th>
+            <th scope="col">11</th>
+            <th scope="col">12</th>
+        </tr>
+        <tr>
+            <th scope="col">NRO.</th>
+            <th scope="col">NroSoc.</th>
+            <th scope="col">Nom.</th>
+            <th scope="col">NroCert.</th>
+            <th scope="col">FC</th>
+            <th scope="col">F</th>
+            <th scope="col">D=(FC - F)</th>
+            <th scope="col">C</th>            
+            <th scope="col">FD=f(D=>90)</th>
+            <th scope="col">DD=FD/360(*)</th>
+            <th scope="col">RA=DD*C</th>
+            <th scope="col">DE=(RA*U)/SUMRA</th>
+        </tr>
+    </thead>
+    <tfoot>        
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan=1>Suma &Sigma; RA =</td>
+            <td>@ViewBag.SumaRA</td>            
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan=1>Suma &Sigma; DE =</td>
+            <td>@ViewBag.Utilidad</td>
+        </tr>
+    </tfoot>
+    <tbody>
+        @foreach (var s_c in ViewBag.Socio_Certificado)
+        {
+            <tr>
+                <td>
+                    @s_c.Nro
+                </td>
+                <td>
+                    @s_c.NroSocio
+                </td>
+                <td>
+                    @s_c.Nombre
+                </td>
+                <td>
+                    @s_c.NroCetificado
+                </td>
+                <td>
+                    @s_c.FC.ToString("dd/MM/yyy")
+                </td>
+                <td>
+                    @s_c.F.ToString("dd/MM/yyy")
+                </td>
+                <td>
+                    @s_c.D
+                </td>
+                <td>
+                    @s_c.C
+                </td>
+                <td>                    
+                    @{FD = ((s_c.D >= 90) ? "CUMPLE" : "NO CUMPLE");}
+                    @FD
+                </td>
+                <td>
+                    @{
+                        //DD = (FD == "CUMPLE") ? @(s_c.D / 360) : 0.00;
+                        //@DD
+                        if (FD == "CUMPLE")
+                        {
+                            DD = Math.Round((Convert.ToDecimal(s_c.D) / 360), 2);
+                        }
+                        else
+                            DD = 0;
+                    }
+                    @DD
+                </td>
+                <td>
+                    @{
+                        //DD = (FD == "CUMPLE") ? @(s_c.D / 360) : 0.00;
+                        //@DD
+                        if (FD == "CUMPLE")
+                        {
+                            RA = Math.Round((s_c.C * DD), 2);
+                        }
+                        else
+                            RA = 0;                                            
+                    }
+                    @RA
+                </td>
+                <td>
+                    @{
+                        if (FD == "CUMPLE")
+                        {
+                            DE = Math.Round(((RA * ViewBag.Utilidad) / ViewBag.SumaRA), 2);
+                        }
+                        else
+                            DE = 0;
+                        SumaDE = SumaDE + DE;
+                    }
+                    @DE
+                </td>
+            </tr>            
+        }        
+    </tbody>
+</table>
+
+
+1 - NRO. = Número correlativo <hr>
+2 - NroSoc. = Número correlativo de Socio <hr>
+3 - Nom. = Nombre de Socio <hr>
+4 - NroCert. = Número correlativo de Certificado <hr>
+5 - FC = Fecha de Cierre (o Retiro) <hr>
+6 - F = Fecha de emisión del Certificado de Aporatación <hr>
+7 - D = (FC - F) = Días desde la Emisión al Cierre de Gestión o Retiro del Socio <hr>
+8 - C = Cantidad de Certificados de Aportación <hr>
+9 - FD = f(D=>90) = Certificados con Antigüedad Minima (90 días) <hr>
+10 - DD = FD/360(*) = Días Válidos sobre el Total de Días (360) <hr>
+11 - RA = DD*C = Relación de Aportaciones y Dias Válidos <hr>
+12 - DE = (RA*U)/SUMRA = Destribución Excedentes de Percepción

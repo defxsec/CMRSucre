@@ -1,0 +1,111 @@
+﻿@model IEnumerable<CMRSucre.Models.Certificado>
+
+@*@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>LISTA DE CERTIFICADOS POR SOCIOS </h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Emision)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cantidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Socio)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Emision)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Socio.Nombre)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CertificadoId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.CertificadoId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CertificadoId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>*@
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- Content Row -->
+
+<div class="row">
+
+    <!-- Area Chart -->
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">LISTA DE CERTIFICADOS POR SOCIOS</h6>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Emision)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Cantidad)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Socio)
+                        </th>
+                        <th>
+                            <a class="btn btn-success text-white" asp-action="Create"><i class="fas fa-random"></i>Nuevo</a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Emision)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cantidad)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Socio.Nombre)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.CertificadoId" class="btn btn-warning">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@item.CertificadoId" class="d-inline">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Esta seguro de eliminar')">
+                                        <i class="fa-solid fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
